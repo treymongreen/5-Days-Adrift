@@ -1,0 +1,248 @@
+/* style.css */
+
+/* --- PS1 Color Palette & Typography --- */
+@import url('https://googleapis.com');
+
+:root {
+    --ps1-black: #0a0a0c;
+    --ps1-dark-gray: #2d2d34;
+    --ps1-light-gray: #a3a3b2;
+    --ps1-white: #e2e2ec;
+    --ps1-blood: #8b0000;
+    --ps1-green: #39ff14;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    cursor: none; /* Hide default cursor for crosshair immersion */
+}
+
+body {
+    background-color: var(--ps1-black);
+    color: var(--ps1-white);
+    font-family: 'Courier Prime', monospace;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* --- Fixed Resolution & Retro Scaling --- */
+#screen-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+}
+
+#game-container {
+    width: 100%;
+    height: 100%;
+}
+
+/* Force Three.js canvas to look blocky and pixelated */
+#game-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* --- CRT Monitor Effect Shader Overlay --- */
+.crt::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    aspect-ratio: initial;
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+    z-index: 999;
+}
+
+/* --- UI Layers & Structural Overlays --- */
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Let clicks pass through to standard gameplay */
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 10, 12, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    pointer-events: auto; /* Re-enable clicks for menus */
+    z-index: 10;
+    transition: opacity 0.5s ease;
+}
+
+.hidden {
+    display: none !important;
+    opacity: 0;
+}
+
+/* --- Typography & Aesthetic Styling --- */
+h1.glitch-text {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--ps1-blood);
+    letter-spacing: 4px;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px #000;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--ps1-light-gray);
+    margin-bottom: 40px;
+}
+
+#game-over-title {
+    font-size: 5rem;
+    color: var(--ps1-blood);
+    margin-bottom: 20px;
+}
+
+#game-over-reason {
+    font-size: 1.2rem;
+    color: var(--ps1-white);
+    margin-bottom: 40px;
+}
+
+/* --- Retro Menu Buttons --- */
+.retro-btn {
+    background-color: var(--ps1-dark-gray);
+    border: 3px solid var(--ps1-light-gray);
+    color: var(--ps1-white);
+    padding: 12px 30px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #000;
+}
+
+.retro-btn:hover {
+    background-color: var(--ps1-light-gray);
+    color: var(--ps1-black);
+    border-color: var(--ps1-white);
+}
+
+.retro-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #000;
+}
+
+/* --- Heads-Up Display (HUD) --- */
+#hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 25px;
+    box-sizing: border-box;
+}
+
+.hud-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 2px 2px #000;
+}
+
+#clock {
+    color: var(--ps1-light-gray);
+}
+
+.hud-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.hud-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-weight: bold;
+    text-shadow: 2px 2px #000;
+}
+
+/* Low-Poly Styled HUD Meter Bars */
+.bar-container {
+    width: 150px;
+    height: 14px;
+    background-color: var(--ps1-dark-gray);
+    border: 2px solid var(--ps1-light-gray);
+}
+
+.bar {
+    height: 100%;
+    width: 100%;
+    background-color: var(--ps1-white);
+    transition: width 0.1s linear;
+}
+
+#awake-bar {
+    background-color: var(--ps1-green);
+}
+
+#inventory-display {
+    display: flex;
+    gap: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 2px 2px #000;
+    background-color: rgba(10, 10, 12, 0.6);
+    padding: 8px 15px;
+    border: 2px dashed var(--ps1-light-gray);
+}
+
+/* --- Target Crosshair & Interaction Tooltip --- */
+#crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    color: rgba(226, 226, 236, 0.6);
+    text-shadow: 1px 1px #000;
+}
+
+#interaction-prompt {
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--ps1-white);
+    text-shadow: 2px 2px #000;
+    text-align: center;
+    background-color: rgba(10, 10, 12, 0.75);
+    padding: 4px 10px;
+    border-radius: 2px;
+    display: none; /* Toggled via JS interaction checks */
+}
