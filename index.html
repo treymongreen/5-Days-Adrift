@@ -1,0 +1,77 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Five Days Adrift - A PS1 Horror Survival Game</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Import Three.js via CDN -->
+    <script src="https://cloudflare.com"></script>
+</head>
+<body>
+    <!-- The CRT/Retro effect overlay wrapper -->
+    <div id="screen-container" class="crt">
+        
+        <!-- WebGL Render Canvas Wrapper -->
+        <div id="game-container"></div>
+
+        <!-- 2D Retro User Interface Layer -->
+        <div id="ui-layer">
+            <!-- Main Title Screen -->
+            <div id="main-menu" class="overlay active">
+                <h1 class="glitch-text">5 DAYS ADRIFT</h1>
+                <p class="subtitle">Survive your camping trip.</p>
+                <button id="start-btn" class="retro-btn">BEGIN TRIP</button>
+            </div>
+
+            <!-- In-Game Heads Up Display (HUD) -->
+            <div id="hud" class="hidden">
+                <div class="hud-top">
+                    <div id="day-counter">DAY 1 - DAYTIME</div>
+                    <div id="clock">08:00 AM</div>
+                </div>
+                
+                <div class="hud-bottom">
+                    <div class="hud-stat">
+                        <span>STAMINA:</span>
+                        <div class="bar-container"><div id="stamina-bar" class="bar"></div></div>
+                    </div>
+                    <div class="hud-stat">
+                        <span>AWAKE:</span>
+                        <div class="bar-container"><div id="awake-bar" class="bar"></div></div>
+                    </div>
+                    <div id="inventory-display">
+                        <span>🍺 x6</span>
+                        <span>🎣 1</span>
+                        <span>🏹 5/5</span>
+                    </div>
+                </div>
+
+                <!-- Crosshair for interaction and aiming -->
+                <div id="crosshair">+</div>
+                
+                <!-- On-screen prompt for interactions -->
+                <div id="interaction-prompt"></div>
+            </div>
+
+            <!-- Game Over / Victory Screen -->
+            <div id="game-over-screen" class="overlay hidden">
+                <h2 id="game-over-title">YOU DIED</h2>
+                <p id="game-over-reason">The forest claimed another soul.</p>
+                <button id="restart-btn" class="retro-btn">RETRY</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Engine Scripts (Ordered by dependency) -->
+    <script src="js/engine.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/environment.js"></script>
+    <script src="js/items.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
