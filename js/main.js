@@ -21,19 +21,18 @@ const Main = {
         this.tick();
     },
 
-    // Replace this function inside js/main.js
-startGame() {
-    this.state = 'PLAYING';
-    document.getElementById('main-menu').classList.add('hidden');
-    document.getElementById('hud').classList.remove('hidden');
-    Environment.setDaytime(true);
+    startGame() {
+        this.state = 'PLAYING';
+        document.getElementById('main-menu').classList.add('hidden');
+        document.getElementById('hud').classList.remove('hidden');
+        Environment.setDaytime(true);
 
-    // FIX: Force the browser to lock the pointer immediately upon clicking the button
-    const canvas = document.querySelector('#game-container canvas');
-    if (canvas) {
-        canvas.requestPointerLock();
-    }
-},
+        // FIX: Force the browser to lock the pointer immediately upon clicking the button
+        const canvas = document.querySelector('#game-container canvas');
+        if (canvas) {
+            canvas.requestPointerLock();
+        }
+    },
 
     tick() {
         requestAnimationFrame(() => this.tick());
