@@ -6,12 +6,20 @@ const AI = {
     speed: 3.0,
     currentMonsterType: 'CREEPER', // CREEPER, STALKER, CHARGER
 
-    init() {
-        const geo = new THREE.BoxGeometry(1.2, 3.8, 1.2);
-        const mat = new THREE.MeshBasicMaterial({ color: 0x1f0505 });
-        this.monsterMesh = new THREE.Mesh(geo, mat);
-        this.monsterMesh.position.set(0, -20, 0); 
-        Engine.scene.add(this.monsterMesh);
+   // Replace ONLY the init() function inside js/ai.js
+init() {
+    const tl = new THREE.TextureLoader();
+    const monsterTex = tl.load('textures/monster.png');
+    monsterTex.magFilter = THREE.NearestFilter;
+    monsterTex.minFilter = THREE.NearestFilter;
+
+    const geo = new THREE.BoxGeometry(1.2, 3.8, 1.2);
+    const mat = new THREE.MeshBasicMaterial({ map: monsterTex });
+    this.monsterMesh = new THREE.Mesh(geo, mat);
+    this.monsterMesh.position.set(0, -20, 0); 
+    Engine.scene.add(this.monsterMesh);
+},
+
     },
 
     spawn() {
