@@ -4,9 +4,9 @@ const AI = {
     active: false,
     distanceToTarget: 40,
     speed: 3.0,
-    currentMonsterType: 'CREEPER', // CREEPER, STALKER, CHARGER
+    currentMonsterType: 'CREEPER',
 
-    init() {
+    init: function() {
         const tl = new THREE.TextureLoader();
         const monsterTex = tl.load('textures/monster.png');
         monsterTex.magFilter = THREE.NearestFilter;
@@ -19,22 +19,29 @@ const AI = {
         Engine.scene.add(this.monsterMesh);
     },
 
-    spawn() {
+    spawn: function() {
         this.active = true;
         
-        // Randomize Monster Archetypes per night
-        const types = ['CREEPER', 'STALKER', 'CHARGER'];
-        this.currentMonsterType = types[Math.floor(Math.random() * types.length)];
-        
-        if (this.currentMonsterType === 'CHARGER') {
-            this.speed = 5.2; // Blazing fast rush down entity
-            this.monsterMesh.material.color.setHex(0x550000); 
-        } else if (this.currentMonsterType === 'STALKER') {
-            this.speed = 2.0; // Slow, silent creeping entity
-            this.monsterMesh.material.color.setHex(0x0a0a0a); 
-        } else {
+        // Pick a random number to choose the monster type safely
+        const rand = Math.random();
+        if (rand < 0.33) {
+            this.currentMonsterType = 'CREEPER';
             this.speed = 3.2;
-            this.monsterMesh.material.color.setHex(0x220505);
+            if (this.monsterMesh && this.monsterMesh.material) {
+                this.monsterMesh.material.color.setHex(0x220505);
+            }
+        } else if (rand < 0.66) {
+            this.currentMonsterType = 'STALKER';
+            this.speed = 2.0;
+            if (this.monsterMesh && this.monsterMesh.material) {
+                this.monsterMesh.material.color.setHex(0x0a0a0a);
+            }
+        } else {
+            this.currentMonsterType = 'CHARGER';
+            this.speed = 5.2;
+            if (this.monsterMesh && this.monsterMesh.material) {
+                this.monsterMesh.material.color.setHex(0x550000);
+            }
         }
 
         const angle = Math.random() * Math.PI * 2;
@@ -42,25 +49,22 @@ const AI = {
         Items.triggerActionPrompt("You hear an unnatural howl ring out from the forest trees...");
     },
 
-    update(delta) {
+    update: function(delta) {
         if (!this.active || Main.timeOfDay !== 'NIGHTTIME') return;
 
         const targetPos = Player.yaw.position;
         this.monsterMesh.lookAt(targetPos.x, this.monsterMesh.position.y, targetPos.z);
         
-        // Move towards player
         this.monsterMesh.translateZ(this.speed * delta);
         
         const dist = this.monsterMesh.position.distanceTo(targetPos);
 
-        // Audio cues represented via retro action warnings based on proximity
         if (dist < 12 && Math.random() < 0.01) {
             Items.triggerActionPrompt("👣 Heavy, rhythmic scraping footsteps are coming closer...");
         }
 
         if (dist < 2.5) {
             if (Player.isInsideVan && !Player.isWatchingTV) {
-                // If you are actively looking out the windows, you can spot and shoot it safely!
                 Items.triggerActionPrompt("THE MONSTER IS AT THE GLASS! SHOOT IT!");
             } else {
                 Main.gameOver(Player.isWatchingTV ? 
@@ -70,7 +74,7 @@ const AI = {
         }
     },
 
-    checkRifleHit() {
+    checkRifleHit: function() {
         if (!this.active) return;
         
         const playerDir = new THREE.Vector3();
@@ -78,7 +82,6 @@ const AI = {
         const toMonster = new THREE.Vector3().subVectors(this.monsterMesh.position, Player.yaw.position).normalize();
         const dot = playerDir.dot(toMonster);
 
-        // If aiming accurately down-sight at target vector
         if (dot > 0.88) {
             Items.triggerActionPrompt("🎯 CRACK! Your bullet struck flesh! It runs back into the woods.");
             this.despawn();
@@ -87,7 +90,7 @@ const AI = {
         }
     },
 
-    despawn() {
+    despawn: function() {
         this.active = false;
         this.monsterMesh.position.set(0, -20, 0);
     }
