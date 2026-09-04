@@ -62,18 +62,17 @@
         </div>
     </div>
 
-    <!-- Core 3D Library Loaded First -->
+    <!-- Core 3D Library Loaded First (Standard blocking load to guarantee it is ready) -->
     <script src="https://cloudflare.com"></script>
 
-    <!-- Game Engine Scripts (Ordered by dependency with defer) -->
-    <script src="js/engine.js" defer></script>
-    <script src="js/input.js" defer></script>
-    <script src="js/player.js" defer></script>
-    <script src="js/environment.js" defer></script>
-    <script src="js/items.js" defer></script>
-    <script src="js/shop.js" defer></script>
-    <script src="js/ai.js" defer></script>
-    <script src="js/main.js" defer></script>
+    <!-- Game Engine Scripts (Ordered sequentially by dependency) -->
+    <script src="js/engine.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/environment.js"></script>
+    <script src="js/items.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
-
