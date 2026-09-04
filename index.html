@@ -62,10 +62,10 @@
         </div>
     </div>
 
-    <!-- Core 3D Library Loaded First (Standard blocking load to guarantee it is ready) -->
-    <script src="https://cloudflare.com"></script>
+    <!-- FIXED: Loads Three.js directly out of your local repository folder -->
+    <script src="js/three.min.js"></script>
 
-    <!-- Game Engine Scripts (Ordered sequentially by dependency) -->
+    <!-- Game Engine Scripts (Ordered by dependency) -->
     <script src="js/engine.js"></script>
     <script src="js/input.js"></script>
     <script src="js/player.js"></script>
