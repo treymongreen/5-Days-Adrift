@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Five Days Adrift - A PS1 Horror Survival Game</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Import Three.js via CDN -->
-    <script src="https://cloudflare.com"></script>
 </head>
 <body>
     <!-- The CRT/Retro effect overlay wrapper -->
@@ -64,14 +62,18 @@
         </div>
     </div>
 
-    <!-- Game Engine Scripts -->
-    <script src="js/engine.js"></script>
-    <script src="js/input.js"></script>
-    <script src="js/player.js"></script>
-    <script src="js/environment.js"></script>  <!-- Fixed spelling must match exactly here -->
-    <script src="js/items.js"></script>
-    <script src="js/shop.js"></script>
-    <script src="js/ai.js"></script>
-    <script src="js/main.js"></script>
+    <!-- Core 3D Library Loaded First -->
+    <script src="https://cloudflare.com"></script>
+
+    <!-- Game Engine Scripts (Ordered by dependency with defer) -->
+    <script src="js/engine.js" defer></script>
+    <script src="js/input.js" defer></script>
+    <script src="js/player.js" defer></script>
+    <script src="js/environment.js" defer></script>
+    <script src="js/items.js" defer></script>
+    <script src="js/shop.js" defer></script>
+    <script src="js/ai.js" defer></script>
+    <script src="js/main.js" defer></script>
 </body>
 </html>
+
