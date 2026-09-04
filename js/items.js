@@ -1,45 +1,63 @@
 // js/items.js
 const Items = {
-    activeItemIndex: 0, // 0: Rifle, 1: Fishing Rod, 2: Beer
+    timeout: null,
 
     usePrimaryItem() {
         if (Player.isWatchingTV) return;
 
-        // Action 1: Take a Sip of Beer
-        if (Player.beerCount > 0 && Player.awake < 85) {
+        // If holding a beer and feeling fatigued, drink it
+        if (Player.beerCount > 0 && Player.awake < 75) {
             Player.beerCount--;
-            Player.awake = Math.min(100, Player.awake + 35);
-            this.triggerActionPrompt("Chugged a beer. Heart is racing.");
+            Player.awake = Math.min(100, Player.awake + 40);
+            this.triggerActionPrompt("Chugged cold beer. Adrenaline pulsing.");
+            this.cameraImpactShake(0.15);
             return;
-        } else if (Player.beerCount === 0) {
-            this.triggerActionPrompt("Out of beer!");
+        } else if (Player.beerCount > 0 && Player.awake >= 75) {
+            this.triggerActionPrompt("Not tired enough to drink yet.");
+            return;
         }
 
-        // Action 2: Go Fishing (Must be daytime near the perimeter boundary edge)
-        if (Main.timeOfDay === 'DAYTIME' && Player.yaw.position.length() > 22) {
-            if (Math.random() > 0.4) {
-                Player.fishCount++;
-                this.triggerActionPrompt("Caught a fish! Can sell this at shop.");
+        // Cast line near deep lake edge context zones
+        if (Main.timeOfDay === 'DAYTIME' && Player.yaw.position.z < -30) {
+            this.triggerActionPrompt("Casting line... waiting...");
+            setTimeout(() => {
+                if (Math.random() > 0.45) {
+                    Player.fishCount++;
+                    this.triggerActionPrompt("🎣 CAUGHT A TROUT! Ready to sell.");
+                } else {
+                    this.triggerActionPrompt("Nibble... but it got away.");
+                }
+            }, 1200);
+            return;
+        }
+
+        // Fire Weapon System
+        if (Main.timeOfDay === 'NIGHTTIME') {
+            if (Player.ammoCount > 0) {
+                Player.ammoCount--;
+                this.triggerActionPrompt("💥 BANG!");
+                this.cameraImpactShake(0.4); // Intense physical screen recoil recoil
+                AI.checkRifleHit();
             } else {
-                this.triggerActionPrompt("Nothing bit standard bait...");
+                this.triggerActionPrompt("⚠️ *CLICK* Out of ammo!");
             }
-            return;
         }
+    },
 
-        // Action 3: Fire Hunting Rifle
-        if (Main.timeOfDay === 'NIGHTTIME' && Player.ammoCount > 0) {
-            Player.ammoCount--;
-            this.triggerActionPrompt("💥 BANG!");
-            AI.checkRifleHit();
-            return;
-        }
+    cameraImpactShake(amount) {
+        Engine.camera.position.x += (Math.random() - 0.5) * amount;
+        Engine.camera.position.y += (Math.random() - 0.5) * amount;
+        setTimeout(() => {
+            Engine.camera.position.set(0,0,0);
+        }, 80);
     },
 
     triggerActionPrompt(text) {
         const el = document.getElementById('interaction-prompt');
+        if (!el) return;
         el.innerText = text;
         el.style.display = 'block';
         clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => { el.style.display = 'none'; }, 2000);
+        this.timeout = setTimeout(() => { el.style.display = 'none'; }, 2200);
     }
 };
