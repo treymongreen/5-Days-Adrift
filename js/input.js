@@ -9,10 +9,11 @@ const Input = {
         window.addEventListener('keydown', (e) => { this.keys[e.code] = true; });
         window.addEventListener('keyup', (e) => { this.keys[e.code] = false; });
 
-        // Pointer lock trigger
         const canvas = document.querySelector('#game-container canvas');
-        canvas.addEventListener('click', () => {
-            if (!this.isLocked && Main.state === 'PLAYING') {
+
+        // FIX: Listen to the whole window for clicks. If playing, lock the cursor.
+        window.addEventListener('click', () => {
+            if (!this.isLocked && Main.state === 'PLAYING' && canvas) {
                 canvas.requestPointerLock();
             }
         });
